@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
   output_file.close();
 
   std::ofstream gitignore_file(path + "/.gitignore");
-  gitignore_file << "build/";
+  gitignore_file << "build/\n";
+  gitignore_file << ".cache/";
   gitignore_file.close();
 }
