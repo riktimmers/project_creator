@@ -30,4 +30,8 @@ int main(int argc, char *argv[]) {
 
   output_file << cmake_file;
   output_file.close();
+
+  std::ofstream gitignore_file(path + "/.gitignore");
+  gitignore_file << "build/";
+  gitignore_file.close();
 }
