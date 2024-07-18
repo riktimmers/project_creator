@@ -1,12 +1,12 @@
-#ifndef _H_CMAKE__ 
-#define _H_CMAKE__
+#ifndef H_CMAKE__ 
+#define H_CMAKE__
 
 #include <string> 
 
 inline std::string createCmakeLists(const std::string project_name) {
   return
-"project(" + project_name + ")\n"
 "cmake_minimum_required(VERSION 3.16.3)\n"
+"project(" + project_name + ")\n"
 "\n"
 "if(NOT CMAKE_BUILD_TYPE)\n"
 " set(CMAKE_BUILD_TYPE Release)\n"
