@@ -15,7 +15,7 @@ inline std::string createCmakeLists(const std::string project_name) {
          "\n"
          "set(CMAKE_EXPORT_COMPILE_COMMANDS On)\n"
          "\n"
-         "add_compile_options(-std=c++17 -O2 -Wall -Werror -Wextra -Wpedantic)\n"
+         "add_compile_options(-std=c++17 -O3 -Wall -Werror -Wextra -Wpedantic)\n"
          "\n"
          "include_directories(\n"
          "  include\n"
