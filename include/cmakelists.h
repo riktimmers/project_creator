@@ -18,7 +18,6 @@ inline std::string createCmakeLists(const std::string project_name) {
          "\n"
          "set(CMAKE_EXPORT_COMPILE_COMMANDS On)\n"
          "\n"
-         "\n"
          "include_directories(\n"
          "  include\n"
          ")\n"
