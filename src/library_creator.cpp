@@ -1,9 +1,11 @@
-#include <string> 
-#include <iostream>
 #include <sys/stat.h>
 #include <sys/types.h>
+
 #include <fstream>
-#include "cmakelists.h"
+#include <iostream>
+#include <string>
+
+#include "cmakelists_library.h"
 
 int main(int argc, char *argv[]) {
   std::string project_name;
@@ -24,7 +26,7 @@ int main(int argc, char *argv[]) {
   mkdir(build_path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   mkdir(src_path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   mkdir(include_path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-  
+
   std::string cmake_file = createCmakeLists(project_name);
   std::ofstream output_file(path + "/CMakeLists.txt");
 
@@ -35,4 +37,9 @@ int main(int argc, char *argv[]) {
   gitignore_file << "build/\n";
   gitignore_file << ".cache/";
   gitignore_file.close();
+
+  std::ofstream ignore_file(path + "/.ignore");
+  ignore_file << "build/\n";
+  ignore_file << ".cache/";
+  ignore_file.close();
 }
