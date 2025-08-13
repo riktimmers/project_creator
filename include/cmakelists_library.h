@@ -6,8 +6,7 @@
 inline std::string createCmakeLists(const std::string project_name) {
   return "cmake_minimum_required(VERSION 3.16.3)\n"
          "project(" +
-         project_name +
-         ")\n"
+         project_name + " VERSION 0.1)\n" +
          "\n"
          "if(NOT CMAKE_BUILD_TYPE)\n"
          " set(CMAKE_BUILD_TYPE Release)\n"
@@ -40,20 +39,52 @@ inline std::string createCmakeLists(const std::string project_name) {
          "    set(CMAKE_INSTALL_PREFIX \"$ENV{HOME}/.local\" CACHE PATH\n"
          "             \"Default install path\" FORCE)\n"
          "endif()\n"
+         "set_target_properties(\n"
+         "${CMAKE_PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION}\n"
+         "SOVERSION ${PROJECT_VERSION_MAJOR})\n"
          "\n"
          "#Install the target \n"
          "install(TARGETS ${CMAKE_PROJECT_NAME}\n"
          "        EXPORT ${CMAKE_PROJECT_NAME}Targets\n"
-         "        LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib\n"
-         "        ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib\n"
-         "        RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)\n"
+         "LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/${PROJECT_NAME}${PROJECT_VERSION}\n"
+         " ARCHIVE    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/${PROJECT_NAME}${PROJECT_VERSION}\n"
+         "RUNTIME  DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}${PROJECT_VERSION}\n"
+         "INCLUDES DESTINATION "
+         "${CMAKE_INSTALL_PREFIX}/lib/${PROJECT_NAME}${PROJECT_VERSION}/include)\n"
          "\n"
          "#Install headers\n"
-         "install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include)\n"
+         "install(DIRECTORY include/ DESTINATION "
+         "${CMAKE_INSTALL_PREFIX}/lib/${PROJECT_NAME}${PROJECT_VERSION}/include)\n"
          "\n"
          "#Export the library configuration\n"
          "install(EXPORT ${CMAKE_PROJECT_NAME}Targets\n"
-         "        FILE ${CMAKE_PROJECT_NAME}Config.cmake\n"
-         "        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/${CMAKE_PROJECT_NAME})\n";
+         "        FILE ${CMAKE_PROJECT_NAME}Targets.cmake\n"
+         "        DESTINATION "
+         "${CMAKE_INSTALL_PREFIX}/lib/cmake/${CMAKE_PROJECT_NAME}${PROJECT_VERSION})\n"
+         "\n"
+         "include(CMakePackageConfigHelpers)\n"
+         "write_basic_package_version_file(\n"
+         "\"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake\" VERSION "
+         "${PROJECT_VERSION} COMPATIBILITY ExactVersion)\n"
+         "\n"
+         "configure_package_config_file(\n"
+         "\"${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in\" \n"
+         "\"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake\" INSTALL_DESTINATION\n"
+         "lib/cmake/${CMAKE_PROJECT_NAME}${PROJECT_VERSION})\n"
+
+         "#Install the Config and ConfigVersion files\n"
+         "install( \n"
+         "FILES\n"
+         "\"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake\" \n"
+         "\"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake\" DESTINATION "
+         "${CMAKE_INSTALL_LIBDIR}/cmake/"
+         "${CMAKE_PROJECT_NAME}${CMAKE_PROJECT_VERSION})\n";
+}
+
+inline std::string createCmakeInFile(const std::string project_name) {
+  return "@PACKAGE_INIT@\n"
+         "\n"
+         "include(\"${CMAKE_CURRENT_LIST_DIR}/" +
+         project_name + "Targets.cmake\")";
 }
 #endif
