@@ -6,7 +6,9 @@
 inline std::string createCmakeLists(const std::string project_name) {
   return "cmake_minimum_required(VERSION 3.16.3)\n"
          "project(" +
-         project_name + " VERSION 0.1)\n" +
+         project_name + " VERSION 0.1)\n" + "set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE) \n" +
+         "set(CMAKE_BUILD_RPATH \"$ORIGIN\") \n" + "set(CMAKE_INSTALL_RPATH \"$ORIGIN\") \n" +
+
          "\n"
          "if(NOT CMAKE_BUILD_TYPE)\n"
          " set(CMAKE_BUILD_TYPE Release)\n"
